@@ -8,12 +8,23 @@ let pokemonList = [{
     name: 'Squirtle',
     height: 0.5,
     ablities: ['Rain-dish', 'Torrent'],
-    type: ['water'],
+    type: ['Water'],
   },
   {
-    name: 'Butterfree',
-    height: 1.1,
-    abilites: ['Compoundeyes', 'Tinted-lens'],
-    type: ['Bug', 'Flying'],
+    name: 'Arbok',
+    height: 3.5,
+    abilites: ['Intimidate', 'Shed-skin', 'Unnerve'],
+    type: ['Poison'],
   }
 ];
+
+// For loop to print out all pokemons in Array. First if statement checks for height. 
+for (let i = 0; i < pokemonList.length; i++) {
+  if (pokemonList[i].height > 1.5) {
+    document.write(pokemonList[i].name + ' (height: ' + pokemonList[i].height +
+      '). Wow, that\'s big! <br>')
+  } else {
+    document.write(pokemonList[i].name + ' (height: ' + pokemonList[i].height + '). <br>')
+  }
+
+}
