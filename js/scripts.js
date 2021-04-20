@@ -25,7 +25,9 @@ let pokemonRepository = (function() {
   }
 
   function add(item) {
-    return pokemonList.push;
+    if (typeof item === 'object') {
+     pokemonList.push(item);
+   }
   }
 
   return {
@@ -34,6 +36,9 @@ let pokemonRepository = (function() {
   };
 
 })();
+
+//added new object as an example to use the add() function.
+pokemonRepository.add({ name: 'Nidoking', height: 1.4});
 
 //forEach Loop with pokemonRepository included
 
