@@ -26,30 +26,48 @@ let pokemonRepository = (function() {
 
   function add(item) {
     if (typeof item === 'object') {
-     pokemonList.push(item);
-   }
+      pokemonList.push(item);
+    }
   }
+//<---- Creating buttons and adding event listener to buttons --->
+  function addListItem(pokemon) {
+    let pokemonListUl = document.querySelector('.pokemon-list');
+    let listItem = document.createElement('li');
+    let button = document.createElement('button');
+    button.innerText = pokemon.name;
+    button.classList.add('pokemon-button');
+    listItem.appendChild(button);
+    pokemonListUl.appendChild(listItem);
+    button.addEventListener('click', function(event){
+      showDetails(pokemon);
+    });
+  }
+  //<--- Once click is registered, pokemon is logged in console -->
+  function showDetails(pokemon){
+    console.log(pokemon);
+  };
 
   return {
     getAll: getAll,
-    add: add
+    add: add,
+    addListItem: addListItem
   };
 
 })();
 
 //added new object as an example to use the add() function.
-pokemonRepository.add({ name: 'Nidoking', height: 1.4});
+pokemonRepository.add({
+  name: 'Nidoking',
+  height: 1.4,
+  abilities: ['Poison-point', 'Rivalry', 'Sheer-force'],
+  type: ['ground', 'poison']
+});
 
-//forEach Loop with pokemonRepository included
+/* <---forEach Loop with pokemonRepository included.
+And addListItem() is called --> */
 
 pokemonRepository.getAll().forEach(function(pokemon) {
-
-  if (pokemon.height > 1.5) {
-    document.write(pokemon.name + ' (height: ' + pokemon.height +
-      '). Wow, that\'s big! <br>')
-  } else {
-    document.write(pokemon.name + ' (height: ' + pokemon.height + '). <br>')
-  }
+  pokemonRepository.addListItem(pokemon);
 });
 
 /*
