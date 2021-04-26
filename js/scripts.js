@@ -1,6 +1,8 @@
 //ARRAY WRAPPED IN IIFE FUNCTION
 let pokemonRepository = (function() {
-  let pokemonList = [{
+  let pokemonList = [];
+
+  /* [{
       name: 'Charmeleon',
       height: 1.1,
       abilities: ['Blaze', ' Solar-power'],
@@ -19,7 +21,7 @@ let pokemonRepository = (function() {
       type: ['Poison'],
     }
   ];
-
+*/
   function getAll() {
     return pokemonList;
   }
@@ -29,7 +31,8 @@ let pokemonRepository = (function() {
       pokemonList.push(item);
     }
   }
-//<---- Creating buttons and adding event listener to buttons --->
+
+  //<---- Creating buttons and adding event listener to buttons --->
   function addListItem(pokemon) {
     let pokemonListUl = document.querySelector('.pokemon-list');
     let listItem = document.createElement('li');
@@ -38,37 +41,88 @@ let pokemonRepository = (function() {
     button.classList.add('pokemon-button');
     listItem.appendChild(button);
     pokemonListUl.appendChild(listItem);
-    button.addEventListener('click', function(event){
+    button.addEventListener('click', function(event) {
       showDetails(pokemon);
     });
   }
   //<--- Once click is registered, pokemon is logged in console -->
-  function showDetails(pokemon){
-    console.log(pokemon);
-  };
+  function showDetails(pokemon) {
+    loadDetails(pokemon).then(function() {
+      console.log(pokemon);
+    });
+  }
+
+  // <---Pokemon API url--->
+  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
+
+// <---Fetch data from pokedex --->
+  function loadList() {
+    return fetch(apiUrl).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      json.results.forEach(function (item) {
+        let pokemon = {
+          name: item.name,
+          detailsUrl: item.url
+        };
+        add(pokemon);
+        console.log(pokemon);
+      });
+    }).catch(function (e) {
+      console.error(e);
+    })
+  }
+
+// <--- Load detailed data for a given Pokemon. --->
+  function loadDetails(item) {
+    let url = item.detailsUrl;
+    return fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (details) {
+      // Now we add the details to the item
+      item.imageUrl = details.sprites.front_default;
+      item.height = details.height;
+      item.types = details.types;
+      item.abilities = details.abilities;
+    }).catch(function (e) {
+      console.error(e);
+    });
+  }
 
   return {
     getAll: getAll,
     add: add,
-    addListItem: addListItem
+    loadList: loadList,
+    loadDetails: loadDetails,
+    addListItem: addListItem,
+    showDetails: showDetails
   };
 
 })();
 
 //added new object as an example to use the add() function.
-pokemonRepository.add({
+/* pokemonRepository.add({
   name: 'Nidoking',
   height: 1.4,
   abilities: ['Poison-point', 'Rivalry', 'Sheer-force'],
   type: ['ground', 'poison']
 });
-
+*/
 /* <---forEach Loop with pokemonRepository included.
 And addListItem() is called --> */
 
-pokemonRepository.getAll().forEach(function(pokemon) {
-  pokemonRepository.addListItem(pokemon);
+pokemonRepository.loadList().then(function(){
+  pokemonRepository.getAll().forEach(function(pokemon) {
+    pokemonRepository.addListItem(pokemon);
+  });
 });
+
+
+
+
+
+
+
 
 /*
 // ORIGINAL pokemonList Array
