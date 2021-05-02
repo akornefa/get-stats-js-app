@@ -2,26 +2,6 @@
 let pokemonRepository = (function() {
   let pokemonList = [];
 
-  /* [{
-      name: 'Charmeleon',
-      height: 1.1,
-      abilities: ['Blaze', ' Solar-power'],
-      type: ['Fire'],
-    },
-    {
-      name: 'Squirtle',
-      height: 0.5,
-      abilities: ['Rain-dish', ' Torrent'],
-      type: ['Water'],
-    },
-    {
-      name: 'Arbok',
-      height: 3.5,
-      abilities: ['Intimidate', ' Shed-skin', ' Unnerve'],
-      type: ['Poison'],
-    }
-  ];
-*/
   function getAll() {
     return pokemonList;
   }
@@ -48,8 +28,60 @@ let pokemonRepository = (function() {
   //<--- Once click is registered, pokemon is logged in console -->
   function showDetails(pokemon) {
     loadDetails(pokemon).then(function() {
-      console.log(pokemon);
+      showModal(pokemon);
     });
+
+    // Create Modal structure
+    let modalContainer = document.querySelector('#modal-container');
+
+    function showModal(pokemon, text) {
+      modalContainer.classList.add('is-visible');
+      modalContainer.innerHTML = '';
+      let modal = document.createElement('div');
+      modal.classList.add('modal');
+
+      let closeButtonElement = document.createElement('button');
+      closeButtonElement.classList.add('modal-close');
+      closeButtonElement.innerText = 'close';
+      closeButtonElement.addEventListener('click', hideModal);
+
+      let  modalTitle = document.createElement('h1');
+      modalTitle.innerText = pokemon.name;
+
+      let modalContent = document.createElement('p');
+      modalContent.innerText = 'Height= ' + pokemon.height;
+
+
+      let myImage = document.createElement('img');
+      myImage.classList.add('sprite-image');
+      myImage.src = pokemon.imageUrl;
+
+
+      modal.appendChild(modalTitle);
+      modal.appendChild(modalContent);
+      modal.appendChild(myImage);
+      modal.appendChild(closeButtonElement);
+      modalContainer.appendChild(modal);
+
+    }
+
+    function hideModal() {
+      modalContainer.classList.remove('is-visible');
+    }
+// Close Modal by hitting escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
+        hideModal();
+      }
+    });
+// Close modal by clicking outside of it
+    modalContainer.addEventListener('click', (e) => {
+      let target = e.target;
+      if (target === modalContainer) {
+        hideModal();
+      }
+    })
+
   }
 
   // <---Pokemon API url--->
@@ -100,14 +132,7 @@ let pokemonRepository = (function() {
 
 })();
 
-//added new object as an example to use the add() function.
-/* pokemonRepository.add({
-  name: 'Nidoking',
-  height: 1.4,
-  abilities: ['Poison-point', 'Rivalry', 'Sheer-force'],
-  type: ['ground', 'poison']
-});
-*/
+
 /* <---forEach Loop with pokemonRepository included.
 And addListItem() is called --> */
 
@@ -116,44 +141,3 @@ pokemonRepository.loadList().then(function(){
     pokemonRepository.addListItem(pokemon);
   });
 });
-
-
-
-
-
-
-
-
-/*
-// ORIGINAL pokemonList Array
-let pokemonList = [{
-    name: 'Charmeleon',
-    height: 1.1,
-    abilities: ['Blaze', ' Solar-power'],
-    type: ['Fire'],
-  },
-  {
-    name: 'Squirtle',
-    height: 0.5,
-    abilities: ['Rain-dish', ' Torrent'],
-    type: ['Water'],
-  },
-  {
-    name: 'Arbok',
-    height: 3.5,
-    abilities: ['Intimidate', ' Shed-skin', ' Unnerve'],
-    type: ['Poison'],
-  }
-];
-*/
-
-// For loop to print out all pokemons in Array. First if statement checks for height.
-/*for (let i = 0; i < pokemonList.length; i++) {
-  if (pokemonList[i].height > 1.5) {
-    document.write(pokemonList[i].name + ' (height: ' + pokemonList[i].height +
-      '). Wow, that\'s big! <br>')
-  } else {
-    document.write(pokemonList[i].name + ' (height: ' + pokemonList[i].height + '). <br>')
-  }
-
-}*/
