@@ -1,3 +1,4 @@
+/* eslint-env jquery */
 //ARRAY WRAPPED IN IIFE FUNCTION
 let pokemonRepository = (function() {
   let pokemonList = [];
@@ -24,7 +25,7 @@ let pokemonRepository = (function() {
     listItem.classList.add('list-group-item', '.list-group-item-action');
     listItem.appendChild(button);
     pokemonListUl.appendChild(listItem);
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function() {
       showDetails(pokemon);
     });
   }
@@ -65,10 +66,11 @@ let pokemonRepository = (function() {
           detailsUrl: item.url
         };
         add(pokemon);
-        console.log(pokemon);
       });
     }).catch(function(e) {
+      /* eslint-disable no-console */
       console.error(e);
+      /* eslint-disable no-console */
     })
   }
 
@@ -98,7 +100,6 @@ let pokemonRepository = (function() {
   };
 
 })();
-
 
 /* <---forEach Loop with pokemonRepository included.
 And addListItem() is called --> */
